@@ -39,7 +39,7 @@ echo "git-lfs $GIT_LFS_REPO" >> $HELPER_SCRIPTS/apt-sources.txt
 #Install hub
 tmp_hub="/tmp/hub"
 mkdir -p "$tmp_hub"
-downloadUrl=$(get_github_package_download_url "github/hub" "contains(\"hub-linux-amd64\")")
+downloadUrl="https://github.com/mislav/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz"
 download_with_retries "$downloadUrl" "$tmp_hub"
 tar xzf "$tmp_hub"/hub-linux-amd64-*.tgz --strip-components 1 -C "$tmp_hub"
 mv "$tmp_hub"/bin/hub /usr/local/bin

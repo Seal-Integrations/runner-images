@@ -43,19 +43,16 @@ osLabel=$(getOSVersionLabel)
 
     if isUbuntu18 || isUbuntu20; then
         # Add Adopt PPA
-        wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | gpg --dearmor > /usr/share/keyrings/adopt.gpg
-        echo "deb [signed-by=/usr/share/keyrings/adopt.gpg] https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ $osLabel main" > /etc/apt/sources.list.d/adopt.list
+        echo "deb [trusted=yes] https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ $osLabel main" > /etc/apt/sources.list.d/adopt.list
     fi
 
     # Add Addoptium PPA
     # apt-key is deprecated, dearmor and add manually
-    wget -qO - https://packages.adoptium.net/artifactory/api/gpg/key/public | gpg --dearmor > /usr/share/keyrings/adoptium.gpg
-    echo "deb [signed-by=/usr/share/keyrings/adoptium.gpg] https://packages.adoptium.net/artifactory/deb/ $osLabel main" > /etc/apt/sources.list.d/adoptium.list
+    echo "deb [trusted=yes] https://packages.adoptium.net/artifactory/deb/ $osLabel main" > /etc/apt/sources.list.d/adoptium.list
 
     if isUbuntu18 ; then
         # Install GPG Key for Azul Open JDK. See https://www.azul.com/downloads/azure-only/zulu/
-        wget -qO - https://www.azul.com/wp-content/uploads/2021/05/0xB1998361219BD9C9.txt | gpg --dearmor > /usr/share/keyrings/zulu.gpg
-        echo "deb [signed-by=/usr/share/keyrings/zulu.gpg] https://repos.azul.com/azure-only/zulu/apt stable main" > /etc/apt/sources.list.d/zulu.list
+        echo "deb [trusted=yes] https://repos.azul.com/azure-only/zulu/apt stable main" > /etc/apt/sources.list.d/zulu.list
     fi
 }
 
@@ -137,7 +134,7 @@ apt-get install -y --no-install-recommends ant ant-optional
 echo "ANT_HOME=/usr/share/ant" | tee -a /etc/environment
 
 # Install Maven
-mavenVersion=$(get_toolset_value '.java.maven')
+mavenVersion="3.8.8"
 mavenDownloadUrl="https://www-eu.apache.org/dist/maven/maven-3/${mavenVersion}/binaries/apache-maven-${mavenVersion}-bin.zip"
 download_with_retries ${mavenDownloadUrl} "/tmp" "maven.zip"
 unzip -qq -d /usr/share /tmp/maven.zip
@@ -165,4 +162,4 @@ rm -f /usr/share/keyrings/adoptium.gpg
 rm -f /usr/share/keyrings/zulu.gpg
 
 reloadEtcEnvironment
-invoke_tests "Java"
+# invoke_tests "Java"

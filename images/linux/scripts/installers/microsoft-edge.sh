@@ -10,7 +10,7 @@ REPO_URL="https://packages.microsoft.com/repos/edge"
 gpg_key="/usr/share/keyrings/microsoft-edge.gpg"
 repo_path="/etc/apt/sources.list.d/microsoft-edge.list"
 
-
+apt install gcc-10
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > $gpg_key
 # Specify an arch as Microsoft repository supports armhf and arm64 as well
 echo "deb [arch=amd64 signed-by=$gpg_key] $REPO_URL stable main" > $repo_path
