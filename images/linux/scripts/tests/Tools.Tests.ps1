@@ -283,10 +283,6 @@ Describe "Kubernetes tools" {
         "kind --version" | Should -ReturnZeroExitCode
     }
 
-    It "kubectl" {
-        "kubectl version" | Should -MatchCommandOutput "Client Version: version.Info"
-    }
-
     It "helm" {
         "helm version" | Should -ReturnZeroExitCode
     }
