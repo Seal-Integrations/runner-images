@@ -8,7 +8,7 @@
 source $HELPER_SCRIPTS/os.sh
 source $HELPER_SCRIPTS/install.sh
 
-REPO_URL="https://apt.postgresql.org/pub/repos/apt/"
+REPO_URL="https://apt-archive.postgresql.org/pub/repos/apt"
 
 # Preparing repo for PostgreSQL
 wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /usr/share/keyrings/postgresql.gpg
