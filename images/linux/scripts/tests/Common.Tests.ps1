@@ -17,7 +17,7 @@ Describe "PHP" {
     }
 
     It "Composer" {
-        "composer --version" | Should -ReturnZeroExitCode
+        "composer --version --no-interaction" | Should -ReturnZeroExitCode
     }
 
     It "Pear" {
