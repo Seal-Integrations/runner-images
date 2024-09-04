@@ -16,7 +16,8 @@ if isUbuntu18 || isUbuntu20; then
     apt-get update
 fi
 
-# Install PHP
+# # Install PHP -- doesn't work because it was removed from the repo. When we will need we will invest time on it
+# Modified versions json (toolset-1804.json) to include only 7.2
 php_versions=$(get_toolset_value '.php.versions[]')
 
 for version in $php_versions; do
