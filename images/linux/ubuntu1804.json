@@ -260,7 +260,8 @@
                 "INSTALLER_SCRIPT_FOLDER={{user `installer_script_folder`}}",
                 "DEBIAN_FRONTEND=noninteractive"
             ],
-            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'",
+            "expect_disconnect": true
         },
         {
             "type": "shell",
