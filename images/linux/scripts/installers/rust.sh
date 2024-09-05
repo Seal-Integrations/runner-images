@@ -22,7 +22,8 @@ rustup component add rustfmt clippy
 if isUbuntu22; then
     cargo install bindgen-cli cbindgen cargo-audit cargo-outdated
 else
-    cargo install --locked bindgen-cli cbindgen cargo-audit cargo-outdated
+    cargo install --locked bindgen-cli cbindgen cargo-audit
+    cargo install --locked cargo-outdated --version 0.11.2 # https://github.com/actions/runner-images/blob/ubuntu18/20230217.2/images/linux/Ubuntu1804-Readme.md
 fi
 
 # Cleanup Cargo cache
