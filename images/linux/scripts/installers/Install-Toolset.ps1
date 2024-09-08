@@ -15,46 +15,54 @@ Function Install-Asset {
 
     Write-Host "Extract $($ReleaseAsset.filename) content..."
     $assetFolderPath = Join-Path $env:INSTALLER_SCRIPT_FOLDER $($ReleaseAsset.filename)
-    if (Test-Path $assetFolderPath) {
-        Write-Host "$ReleaseAsset.filename already exists. Skipping extraction."
-    } else {
-        New-Item -ItemType Directory -Path $assetFolderPath
-        tar -xzf $ReleaseAsset.filename -C $assetFolderPath
+    New-Item -ItemType Directory -Path $assetFolderPath -Force
+    tar -xzf $ReleaseAsset.filename -C $assetFolderPath
 
-        Write-Host "Invoke installation script..."
-        Push-Location -Path $assetFolderPath
-        Invoke-Expression "bash ./setup.sh"
-        Pop-Location
-    }
+    Write-Host "Invoke installation script..."
+    Push-Location -Path $assetFolderPath
+    Invoke-Expression "bash ./setup.sh"
+    Pop-Location
 }
 
 $ErrorActionPreference = "Stop"
 
 # Get toolset content
 $toolset = Get-Content -Path "$env:INSTALLER_SCRIPT_FOLDER/toolset.json" -Raw
-
 $tools = ConvertFrom-Json -InputObject $toolset | Select-Object -ExpandProperty toolcache | Where-Object {$_.url -ne $null }
-Write-Host "$($tools)"
 
 foreach ($tool in $tools) {
-    # Get versions manifest for current tool
-    $assets = Invoke-RestMethod $tool.url
-
-    # Get github release asset for each version
-    foreach ($toolVersion in $tool.versions) {
-        $asset = $assets | Where-Object version -like $toolVersion `
-        | Select-Object -ExpandProperty files `
-        | Where-Object { ($_.platform -eq $tool.platform) -and ($_.platform_version -eq $tool.platform_version)} `
-        | Select-Object -First 1
-
-        Write-Host "$asset"
-        Write-Host "Installing $($tool.name) $toolVersion $($tool.arch)..."
-        if ($null -ne $asset) {
+    # Check if tool name is "Python"
+    if ($tool.name -eq "Python" -and $tool.PSObject.Properties.Match('direct_links')) {
+        Write-Host "Installing $($tool.name) using direct links..."
+        foreach ($directLink in $tool.direct_links) {
+            $filename = [System.IO.Path]::GetFileName($directLink)
+            $asset = @{
+                filename = $filename
+                download_url = $directLink
+            }
             Install-Asset -ReleaseAsset $asset
-        } else {
-            Write-Host "Asset was not found in versions manifest"
-            exit 1
         }
     }
+    else {
+        # Get versions manifest for current tool
+        $assets = Invoke-RestMethod $tool.url
+
+        # Get GitHub release asset for each version
+        foreach ($toolVersion in $tool.versions) {
+            $asset = $assets | Where-Object version -like $toolVersion `
+            | Select-Object -ExpandProperty files `
+            | Where-Object { ($_.platform -eq $tool.platform) -and ($_.platform_version -eq $tool.platform_version)} `
+            | Select-Object -First 1
+
+            Write-Host "Installing $($tool.name) $toolVersion $($tool.arch)..."
+            if ($null -ne $asset) {
+                Install-Asset -ReleaseAsset $asset
+            } else {
+                Write-Host "Asset was not found in versions manifest"
+                exit 1
+            }
+        }
+    }
+
     chown -R "$($env:SUDO_USER):$($env:SUDO_USER)" "/opt/hostedtoolcache/$($tool.name)"
 }
