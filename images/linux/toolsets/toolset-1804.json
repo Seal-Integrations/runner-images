@@ -31,10 +31,10 @@
             "url" : "https://raw.githubusercontent.com/actions/node-versions/main/versions-manifest.json",
             "platform" : "linux",
             "arch": "x64",
-            "versions": [
-                "14.*",
-                "16.*",
-                "18.*"
+            "direct_links": [
+                "https://github.com/actions/node-versions/releases/download/14.21.3-4202774076/node-14.21.3-linux-x64.tar.gz",
+                "https://github.com/actions/node-versions/releases/download/16.20.2-5819740093/node-16.20.2-linux-x64.tar.gz",
+                "https://github.com/actions/node-versions/releases/download/18.20.4-9860952736/node-18.20.4-linux-x64.tar.gz"
             ]
         },
         {

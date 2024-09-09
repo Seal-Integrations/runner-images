@@ -32,7 +32,7 @@ $tools = ConvertFrom-Json -InputObject $toolset | Select-Object -ExpandProperty 
 
 foreach ($tool in $tools) {
     # Check if tool name is "Python"
-    if ($tool.name -eq "Python" -and $tool.PSObject.Properties.Match('direct_links')) {
+    if (($tool.name -eq "Python" -or $tool.name -eq "node") -and $tool.PSObject.Properties.Match('direct_links')) {
         Write-Host "Installing $($tool.name) using direct links..."
         foreach ($directLink in $tool.direct_links) {
             $filename = [System.IO.Path]::GetFileName($directLink)
