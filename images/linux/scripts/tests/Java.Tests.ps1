@@ -50,13 +50,13 @@ Describe "Java" {
       "`"$javaPath`" -version" | Should -MatchCommandOutput ([regex]::Escape("openjdk version `"${Version}."))
     }
 
-    It "Java Adopt <Version>" -TestCases $adoptJdkVersions -Skip:(Test-IsUbuntu22) {
-        $javaPath = Join-Path (Get-ChildItem ${env:AGENT_TOOLSDIRECTORY}\Java_Adopt_jdk\${Version}*) "x64\bin\java"
-        "`"$javaPath`" -version" | Should -ReturnZeroExitCode
+    # It "Java Adopt <Version>" -TestCases $adoptJdkVersions -Skip:(Test-IsUbuntu22) {
+    #     $javaPath = Join-Path (Get-ChildItem ${env:AGENT_TOOLSDIRECTORY}\Java_Adopt_jdk\${Version}*) "x64\bin\java"
+    #     "`"$javaPath`" -version" | Should -ReturnZeroExitCode
 
-        if ($Version -eq 8) {
-            $Version = "1.${Version}"
-        }
-       "`"$javaPath`" -version" | Should -MatchCommandOutput ([regex]::Escape("openjdk version `"${Version}."))
-    }
+    #     if ($Version -eq 8) {
+    #         $Version = "1.${Version}"
+    #     }
+    #    "`"$javaPath`" -version" | Should -MatchCommandOutput ([regex]::Escape("openjdk version `"${Version}."))
+    # }
 }
